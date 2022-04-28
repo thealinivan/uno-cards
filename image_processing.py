@@ -1,5 +1,7 @@
 #image processing file
 
+#ml to identify card numbers?
+
 #get card color
 def getCardColor(frame, cardColors):
     color = "color"
@@ -13,6 +15,8 @@ def getCardNumber(frame, cardNumbers, cardWilds):
 #get card data: color, number, special cards
 def getCardData(frame, cardColors, cardNumbers, CardWilds):
     cardData = "card data"
+    cardData += getCardColor(frame, cardColors)
+    cardData += getCardNumber(frame, cardNumbers, cardWilds)
     return cardData
 
 

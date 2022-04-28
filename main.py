@@ -1,7 +1,9 @@
 #main file
-from cam import openCam
+import sys
 from core import readFromFile
 from core import liveStream
+from data_capturing import collectData
+import matplotlib.pyplot as plt
 
 #user option
 def getUserOption():
@@ -12,6 +14,7 @@ def getUserOption():
     print("[1] Read from file")
     print("[2] Live camera stream")
     print("[3] Data capturing")
+    print("[0] Exit")
     option = input("::")
     return option
 

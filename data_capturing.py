@@ -1,6 +1,5 @@
 #data capturing file
 import cv2
-from time import sleep
 
 #data collection for read from file image recognition
 def collectData():
