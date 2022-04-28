@@ -19,7 +19,7 @@ Recognizing uno cards using computer vision
 In a terminal window
 ```
 git clone https://labcode.mdx.ac.uk/alinivan/uno-cards.git
-cd ml-augmentation
+cd uno-cards
 python main.py
 ```
 When running a menu will appear in the terminal window as ilustrated bellow.
@@ -72,6 +72,7 @@ When running a menu will appear in the terminal window as ilustrated bellow.
 - University project
 - MSc Robotics
 - Computer Vision and Image Recognition
+
 ## Authors and acknowledgment
 - Alin Ivan
 - Middlesex University
@@ -79,5 +80,3 @@ When running a menu will appear in the terminal window as ilustrated bellow.
 
 ## License
 - MIT
-
-
