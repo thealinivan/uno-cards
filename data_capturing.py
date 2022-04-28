@@ -1,15 +1,16 @@
+#data capturing file
 import cv2
 from time import sleep
 
-
-def collectData(h, w):
+#data collection for read from file image recognition
+def collectData():
     cardColors = ["r", "g", "b", "y"]
     cardNumbers = [0,1,2,3,4,5,6,7,8,9,"d","a","n"]
-    cardGeneralWilds = ["w1", "w2", "w3"]
+    cardGeneralWilds = ["x", "y", "z"]
     
     vc = cv2.VideoCapture(1)
-    vc.set(3, h)
-    vc.set(4, w)
+    vc.set(3, 969)
+    vc.set(4, 1280)
     key = "key" 
     
     for c in cardColors:
@@ -23,7 +24,7 @@ def collectData(h, w):
                     sleep(1/100)
                     key = input()
                 key = "key"  
-                cv2.imwrite('./images/'+ c + str(n)+'.jpg', frame)
+                cv2.imwrite('./img/'+ c + str(n)+'.jpg', frame)
                 print('Saved: '+c+str(n))
     cv2.destroyWindow("stream")
     cv2.VideoCapture(0).release()
