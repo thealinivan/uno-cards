@@ -11,11 +11,15 @@ def plotData(frame, cardCrop, colorCrop, numberCrop):
     plt.pause(0.001)
     print(plt.imshow(numberCrop))
     plt.pause(0.001) 
-    print(colorCrop)
+
 
 #get card color
 def getCardColor(colorCrop, cardColors):
     color = "RED"
+    r,g,b = (colorCrop[0][0])
+    print(r)
+    print(g)
+    print(b)
     return color
 
 #get card number
@@ -31,7 +35,8 @@ def getEnhancedframe(frame, cardData):
 def getCardData(isFromFile, frame, cardColors, cardNumbers):
     cardCrop = frame[225:590, 225:470]
     colorCrop = cardCrop[100:101, 100:101]
-    numberCrop = cardCrop[110:260, 70: 180]
+    #numberCrop = cardCrop[110:260, 70:180] 
+    numberCrop = cardCrop[110:260, 50:200] #150x150 ML
     if isFromFile: plotData(frame, cardCrop, colorCrop, numberCrop)
     cardData = ""
     cardData += getCardColor(colorCrop, cardColors)
