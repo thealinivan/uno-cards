@@ -1,35 +1,35 @@
 #data capturing file
-import cv2
+import cv2 as cv
+import matplotlib.pyplot as plt
 
-#data collection for read from file image recognition
-def collectData():
-    cardColors = ["r", "g", "b", "y"]
-    cardNumbers = [0,1,2,3,4,5,6,7,8,9,"d","a","n"]
-    cardGeneralWilds = ["x", "y", "z"]
-    
-    vc = cv2.VideoCapture(1)
-    vc.set(3, 969)
-    vc.set(4, 1280)
-    key = "key" 
-    
+cardColors = ["r", "g", "b", "y"]
+cardNumbers = [0,1,2,3,4,5,6,7,8,9,"d","a","n"]
+
+#capture and save data:
+def dataCapture(vc):
     for c in cardColors:
         for n in cardNumbers: 
-            while vc.isOpened():    
-                rval, frame = vc.read()
-                cv2.imshow("stream", frame)
-                print('Please show: '+c+str(n))
-                #take screnshot and save to file
-                while key != "":
-                    sleep(1/100)
-                    key = input()
-                key = "key"  
-                cv2.imwrite('./img/'+ c + str(n)+'.jpg', frame)
-                print('Saved: '+c+str(n))
-    cv2.destroyWindow("stream")
-    cv2.VideoCapture(0).release()
-
-
-
+            print('Please show: '+ c +str(n) )
+            card = "" 
+            while card == "": card = input()
+            rval, frame = vc.read()
+            cv.imwrite('./img/'+ c + str(n)+'.jpg', frame)
+            print('Saved: '+c+str(n))
+            print(plt.imshow(cv.cvtColor(frame, cv.COLOR_BGR2RGB)))
+            plt.pause(0.001)
+            
+#data collection for read from file image recognition
+def collectData(camIndex):
+    print("Opening camera with index " + str(camIndex) + "...")
+    vc = cv.VideoCapture(camIndex)
+    vc.set(3, 960)
+    vc.set(4, 1280)
+    while vc.isOpened():
+        dataCapture(vc)
+        k=cv.waitKey(1)
+        if k==27: break
+    cv.destroyAllWindows()  
+    cv.VideoCapture(0).release()
 
 
 

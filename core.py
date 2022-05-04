@@ -1,41 +1,43 @@
 #core file
+import os
 import cv2 as cv
+import numpy as np
 import matplotlib.pyplot as plt
-from image_processing import getCardData
-import glob
+from image_processing import *
 
 cardColors = ["r", "g", "b", "y"]
 cardNumbers = [0,1,2,3,4,5,6,7,8,9,"d","a","n"]
-cardWilds = ["x", "y", "z"]
 
 #run image recognition by opening a live stream using connected camera at index 0 
-def liveStream(h, w):
-    #setup
-    vc = cv.VideoCapture(0)
+def liveStream(camIndex):
+    print("Opening camera with index " + str(camIndex) + "...")
+    vc = cv.VideoCapture(camIndex)
     vc.set(3, 960)
     vc.set(4, 1280)
-    currentCard = "r1"
+    currentCard = ""
     while vc.isOpened():
         rval, frame = vc.read()
-        
-        #...
-        
-        print("Current Card: " + str(currentCard))
-        cv.imshow("stream", frame)
+        frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+        frame = np.asarray(frame)
+        enhancedFrame, detectedCard = getCardData(0, frame, cardColors, cardNumbers)
+        print("Current Card: " + str(detectedCard))
+        cv.imshow("stream", cv.cvtColor(enhancedFrame, cv.COLOR_BGR2RGB))
         key = cv.waitKey(1)
         if key == 27: break
     cv.destroyWindow("stream")
     vc.release()
 
-#run image recognition by reading images from files
-def readFromFile():
-    images = glob.glob('img/*.jpg')
-    for name in images:
-        img = cv.imread(name)
-        frame = getCardData(img, cardColors, cardNumbers, cardWilds)
-        #cv.imshow('file_read', frame)
-        print(plt.imshow(frame/255))
+#run image recognition by reading image from file
+def readFromFile(imgName):
+    if os.path.isfile("img/" + imgName + ".jpg"):
+        frame = cv.cvtColor(cv.imread("img/" + imgName + ".jpg"), cv.COLOR_BGR2RGB)
+        frame = np.asarray(frame)
+        print("Read from file: " + str(imgName))
+        enhancedFrame, detectedCard = getCardData(1, frame, cardColors, cardNumbers)
+        print(plt.imshow(enhancedFrame))
+        print("Detected information: " + str(detectedCard))
         plt.pause(0.001)
+    
 
         
         
