@@ -5,10 +5,15 @@ from menu import *
 from core import readFromFile
 from core import liveStream
 from data_capturing import collectData
-
+from image_processing import trainModels
 
 cardColors = ["r", "g", "b", "y"]
 cardNumbers = [0,1,2,3,4,5,6,7,8,9,"d","a","n"]
+
+
+#train ml models
+print("Initializing ML models..")
+trainModels() 
 
 #main loop
 opt = getUserOption()

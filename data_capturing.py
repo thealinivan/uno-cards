@@ -2,7 +2,7 @@
 import cv2 as cv
 import matplotlib.pyplot as plt
 
-cardColors = ["r", "g", "b", "y"]
+cardColors = ["r", "y", "g", "b"]
 cardNumbers = [0,1,2,3,4,5,6,7,8,9,"d","a","n"]
 
 #capture and save data:
