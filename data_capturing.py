@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 
 cardColors = ["r", "y", "g", "b"]
 cardNumbers = [0,1,2,3,4,5,6,7,8,9,"d","a","n"]
+main_src_folder = './img/'
+src_folder = './train/1/'
 
 #capture and save data:
 def dataCapture(vc):
@@ -13,7 +15,7 @@ def dataCapture(vc):
             card = "" 
             while card == "": card = input()
             rval, frame = vc.read()
-            cv.imwrite('./img/'+ c + str(n)+'.jpg', frame)
+            cv.imwrite(src_folder + c + str(n)+'.jpg', frame)
             print('Saved: '+c+str(n))
             print(plt.imshow(cv.cvtColor(frame, cv.COLOR_BGR2RGB)))
             plt.pause(0.001)

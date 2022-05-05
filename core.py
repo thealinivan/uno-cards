@@ -11,13 +11,13 @@ from keras.preprocessing.image import load_img as load
 def liveStream(camIndex):
     print("Opening camera with index " + str(camIndex) + "...")
     vc = cv.VideoCapture(camIndex)
-    vc.set(3, 600)
-    vc.set(4, 800)
+    vc.set(3, 800)
+    vc.set(4, 600)
     currentCard = ""
     while vc.isOpened():
         rval, frame = vc.read()
         frame = np.asarray(frame)
-        #frame, detectedCard = getCardData(frame)
+        frame, detectedCard = getCardData(frame)
         cv.imshow("stream", frame)
         key = cv.waitKey(1)
         if key == 27: break
@@ -27,7 +27,7 @@ def liveStream(camIndex):
 #form file / args: string - image name
 def readFromFile(imgName):
     if os.path.isfile("img/" + imgName + ".jpg"):
-        frame = np.asarray(load('img/'+ imgName +'.jpg', target_size=(256,256)))
+        frame = np.asarray(load('img/'+ imgName +'.jpg', target_size=(600, 800)))
         frame = np.asarray(frame)
         print("Card Info: " + str(imgName))
         enhancedFrame, detectedCard = getCardData(frame)
