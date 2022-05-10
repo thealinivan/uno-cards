@@ -114,13 +114,10 @@ def getCardData(frame):
         cardData = num + " " + col
    
     #draw
-    x,y,w,h = cv.boundingRect(np.asarray(cnt))
-    cv.rectangle(rFrame, (x, y), (x + w, y + h), (0,255,0), 1)
-    cv.putText(rFrame, cardData, (x+5, y-10), cv.FONT_HERSHEY_SIMPLEX, 1, (38, 38, 38), 2)
-    cv.drawContours(frame, rCardCont, -1, (0,255,100), 1)
-    cv.rectangle(frame, (x, y), (x + w, y + h), (0,255,0), 1)
+    cv.rectangle(frame, (x, y), (x + w, y + h), (0,255,0), 2)
     cv.putText(frame, cardData, (x+5, y-10), cv.FONT_HERSHEY_SIMPLEX, 1, (38, 38, 38), 2)
-    cv.drawContours(frame, rCardCont, -1, (0,255,0), 1)
+    cv.drawContours(frame, cnt, -1, (255,0,0), 1)
+    cv.drawContours(frame, rCnt, -1, (0,0,255), 1)
     return [frame, cardData]
 
 #training models for KNN classifiers
