@@ -17,13 +17,13 @@ resY = 800
 
 #get contours / args: numpy array - image / return numpy array - contours
 def getContours(frame):
-   mono = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
-   blur = cv.blur(mono, (10, 10))
-   th = cv.adaptiveThreshold(blur, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 35, 2)
-   kernel = np.ones((5, 5), np.uint8)
-   close = cv.morphologyEx(th, cv.MORPH_OPEN, kernel)
-   cont, t = cv.findContours(close, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
-   return cont
+    mono = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
+    blur = cv.blur(mono, (10, 10))
+    th = cv.adaptiveThreshold(blur, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 35, 2)
+    kernel = np.ones((5, 5), np.uint8)
+    close = cv.morphologyEx(th, cv.MORPH_OPEN, kernel)
+    cont, t = cv.findContours(close, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
+    return cont
 
 #get thresholded image / args: numpy array - image / return numpy array - thresholded image
 def getThreshold(frame):
@@ -31,6 +31,19 @@ def getThreshold(frame):
     blur = cv.blur(mono, (5, 5))
     th = cv.adaptiveThreshold(blur, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 35, 2)
     return th
+
+#plot images / args: numpy arrays - frame, rotated frame, card crop, color crop, number crop
+def printData(frame, rFrame, cardCrop, colorCrop, numberCrop):
+    print(plt.imshow(frame))
+    plt.pause(0.001)
+    print(plt.imshow(rFrame))
+    plt.pause(0.001)
+    print(plt.imshow(cardCrop))
+    plt.pause(0.001)
+    print(plt.imshow(colorCrop))
+    plt.pause(0.001)
+    print(plt.imshow(numberCrop, cmap='Greys_r'))
+    plt.pause(0.001)
 
 #get card color / args: KNN - classifier, numpy array - card / return: string - color
 def getCardColor(clf, card):
@@ -49,6 +62,7 @@ def getCardNumber(clf, card):
 #get card data / args: numpy array - image / return: numpy array - image, string - card info
 def getCardData(frame):
     cardData = ""
+    numberCrop = ()
     
     #card in image
     cardCont = getContours(frame)
@@ -56,62 +70,49 @@ def getCardData(frame):
     maxCnt = 1600
     for c in cardCont: 
         if len(c) > len(cnt) and len(c) < maxCnt: cnt = c
-    if len(cnt) > 0:
-        (x,y),(MA,ma),angle = cv.fitEllipse(cnt)
-        
-        #rotated frame
-        (h, w) = frame.shape[:2]
-        center = (x, y)
-        if angle > 90: angle = 180 + abs(angle)
-        scale = 1
-        M = cv.getRotationMatrix2D(center, angle, scale)
-        rFrame = cv.warpAffine(frame, M, (w, h))
-        
-        #card in rotated image
-        rCardCont = getContours(rFrame)
-        rCnt = ()
-        maxCnt = 1600
-        for c in rCardCont: 
-            if len(c) > len(rCnt) and len(c) < maxCnt: rCnt = c
-        if len(rCnt) > 0:
-            (x,y),(MA,ma),angle = cv.fitEllipse(cnt)
-            
-            #crops
-            ch = 360
-            cw = 240
-            cx = int((x - (ch-120)/2))
-            cy = int((y - (cw+120)/2))
-            cardCrop = rFrame[cx:cx+ch, cy:cy+cw]
-            colorCrop = cardCrop[100:102, 150:152]
-            numberCrop = cardCrop[110:260, 50:200]
-            numberCrop = getThreshold(numberCrop)
-            
-            #process progress (image step by step)
-            print(plt.imshow(frame))
-            plt.pause(0.001)
-            print(plt.imshow(rFrame))
-            plt.pause(0.001)
-            print(plt.imshow(cardCrop))
-            plt.pause(0.001)
-            print(plt.imshow(colorCrop))
-            plt.pause(0.001)
-            print(plt.imshow(numberCrop, cmap='Greys_r'))
-            plt.pause(0.001)
-            
-            #predict
-            pcol = Bunch(data=colorCrop)
-            pcol = (pcol.data).reshape(1, 2*2*3)
-            col = getCardColor(colorClf, pcol)
-            pnum = Bunch(data=numberCrop)
-            pnum = (pnum.data).reshape(1, 150*150)
-            num = str(getCardNumber(numberClf, pnum))
-            cardData = num + " " + col
-           
-            #draw
-            x,y,w,h = cv.boundingRect(np.asarray(cnt))
-            cv.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 153), 2)
-            cv.putText(frame, cardData, (x+5, y-10), cv.FONT_HERSHEY_SIMPLEX, 1, (38, 38, 38), 2)
-        
+    (x,y),(MA,ma),angle = cv.fitEllipse(cnt)
+    
+    #rotated frame
+    (h, w) = frame.shape[:2]
+    center = (x, y)
+    if angle > 90: angle = 180 + abs(angle)
+    scale = 1
+    M = cv.getRotationMatrix2D(center, angle, scale)
+    rFrame = cv.warpAffine(frame, M, (w, h))
+    
+    #card in rotated image
+    rCardCont = getContours(rFrame)
+    rCnt = ()
+    maxCnt = 1600
+    for c in rCardCont: 
+        if len(c) > len(rCnt) and len(c) < maxCnt: rCnt = c
+    (x,y),(MA,ma),angle = cv.fitEllipse(cnt)
+    
+    #crops
+    ch = 360
+    cw = 240
+    cx = int((x - (ch-120)/2))
+    cy = int((y - (cw+120)/2))
+    cardCrop = rFrame[cx:cx+ch, cy:cy+cw]
+    colorCrop = cardCrop[100:102, 150:152]
+    numberCrop = cardCrop[110:260, 50:200]
+    if numberCrop.shape == (150,150,3): 
+        numberCrop = getThreshold(numberCrop)
+        #print image processing outputs
+        #printData(frame, rFrame, cardCrop, colorCrop, numberCrop)
+        #predict
+        pcol = Bunch(data=colorCrop)
+        pcol = (pcol.data).reshape(1, 2*2*3)
+        col = getCardColor(colorClf, pcol)
+        pnum = Bunch(data=numberCrop)
+        pnum = (pnum.data).reshape(1, 150*150)
+        num = str(getCardNumber(numberClf, pnum))
+        cardData = num + " " + col
+   
+    #draw
+    x,y,w,h = cv.boundingRect(np.asarray(cnt))
+    cv.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 153), 2)
+    cv.putText(frame, cardData, (x+5, y-10), cv.FONT_HERSHEY_SIMPLEX, 1, (38, 38, 38), 2)
     return [frame, cardData]
 
 #training models for KNN classifiers
