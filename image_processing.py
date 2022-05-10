@@ -20,6 +20,10 @@ def getContours(frame):
     mono = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
     blur = cv.blur(mono, (10, 10))
     th = cv.adaptiveThreshold(blur, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 35, 2)
+    #HSVmin = np.array([0, 55, 55])
+    #HSVmax = np.array([359, 255, 255])
+    #HSVim = cv.cvtColor(frame, cv.COLOR_RGB2HSV);
+    #th = cv.inRange(HSVim, HSVmin, HSVmax)
     kernel = np.ones((5, 5), np.uint8)
     close = cv.morphologyEx(th, cv.MORPH_OPEN, kernel)
     cont, t = cv.findContours(close, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
@@ -99,7 +103,7 @@ def getCardData(frame):
     if numberCrop.shape == (150,150,3): 
         numberCrop = getThreshold(numberCrop)
         #print image processing outputs
-        #printData(frame, rFrame, cardCrop, colorCrop, numberCrop)
+        printData(frame, rFrame, cardCrop, colorCrop, numberCrop)
         #predict
         pcol = Bunch(data=colorCrop)
         pcol = (pcol.data).reshape(1, 2*2*3)
@@ -111,8 +115,12 @@ def getCardData(frame):
    
     #draw
     x,y,w,h = cv.boundingRect(np.asarray(cnt))
-    cv.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 153), 2)
+    cv.rectangle(rFrame, (x, y), (x + w, y + h), (0,255,0), 1)
+    cv.putText(rFrame, cardData, (x+5, y-10), cv.FONT_HERSHEY_SIMPLEX, 1, (38, 38, 38), 2)
+    cv.drawContours(frame, rCardCont, -1, (0,255,100), 1)
+    cv.rectangle(frame, (x, y), (x + w, y + h), (0,255,0), 1)
     cv.putText(frame, cardData, (x+5, y-10), cv.FONT_HERSHEY_SIMPLEX, 1, (38, 38, 38), 2)
+    cv.drawContours(frame, rCardCont, -1, (0,255,0), 1)
     return [frame, cardData]
 
 #training models for KNN classifiers
@@ -130,8 +138,8 @@ def trainModels():
                 el = np.asarray(load('img/'+ c + str(n) +'.jpg', target_size=(resX,resY)))
                 cardCrop = el[225:590, 225:470]
                 colorCrop = cardCrop[100:102, 100:102]
-                #print(plt.imshow(colorCrop))
-                #plt.pause(0.001)
+                print(plt.imshow(colorCrop))
+                plt.pause(0.001)
                 dc.append(colorCrop)
                 t.append(cardColors.index(c))
             except IOError: break
@@ -155,8 +163,8 @@ def trainModels():
                 el = np.asarray(load('img/'+ c + str(n) +'.jpg', target_size=(resX,resY)))
                 cardCrop = el[225:590, 225:470]
                 numberCrop = getThreshold(cardCrop[110:260, 50:200])
-                #print(plt.imshow(numberCrop, cmap='Greys_r'))
-                #plt.pause(0.001)
+                print(plt.imshow(numberCrop, cmap='Greys_r'))
+                plt.pause(0.001)
                 dn.append(numberCrop)
                 t.append(cardNumbers.index(n))
             except IOError: break

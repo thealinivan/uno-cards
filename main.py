@@ -62,7 +62,7 @@ def liveStream(camIndex):
             frame = np.asarray(cv.cvtColor(frame, cv.COLOR_BGR2RGB))
             frame, detectedCard = getCardData(frame)
             frame = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
-        cv.imshow("stream", frame)
+        cv.imshow("frame", frame)
         i+=1
         key = cv.waitKey(1)
         if key == 27: break
@@ -74,7 +74,7 @@ def readFromFile(imgName):
     if os.path.isfile("img/" + imgName + ".jpg"):
         frame = np.asarray(load('img/'+ imgName +'.jpg', target_size=(600,800)))
         print("Card Info: " + str(imgName))
-        enhancedFrame, detectedCard = getCardData(frame)
+        frame, detectedCard = getCardData(frame)
         print(plt.imshow(frame))
         print("Detected as: " + str(detectedCard))
         plt.pause(0.001)
