@@ -60,7 +60,7 @@ def liveStream(camIndex):
         rval, frame = vc.read()
         if i > 20:
             frame = np.asarray(cv.cvtColor(frame, cv.COLOR_BGR2RGB))
-            frame, detectedCard = getCardData(frame)
+            frame, detectedCard = getCardData(True, frame)
             frame = cv.cvtColor(frame, cv.COLOR_RGB2BGR)
         cv.imshow("frame", frame)
         i+=1
@@ -74,13 +74,14 @@ def readFromFile(imgName):
     if os.path.isfile("img/" + imgName + ".jpg"):
         frame = np.asarray(load('img/'+ imgName +'.jpg', target_size=(600,800)))
         print("Card Info: " + str(imgName))
-        frame, detectedCard = getCardData(frame)
+        frame, detectedCard = getCardData(False, frame)
         print(plt.imshow(frame))
         print("Detected as: " + str(detectedCard))
         plt.pause(0.001)
 
 #PROGRAM
 #train ml models
+print("")
 print("Initializing ML models..")
 trainModels()
 
