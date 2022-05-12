@@ -6,6 +6,7 @@ Recognizing uno cards using computer vision
 - Presentation video: TBA
 
 # Getting started
+**Additional documentation available in the documentation folder**
 
 ### Pre-requisites
  - Python 3.9.7
@@ -66,7 +67,6 @@ When running a menu will appear in the terminal window as ilustrated bellow.
 - **core.py** handles the abstract **image recognition**
 - **image_processing.py** handles **image processing** and recognition of **color**, **number** of the each card
 - **data_capturing.py** handles the **capturing of the images for static processing**
-
 
 ## Project info
 - University project
