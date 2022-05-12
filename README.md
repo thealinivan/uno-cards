@@ -38,7 +38,7 @@ When running a menu will appear in the terminal window as ilustrated bellow.
 # Program logic
 
 **Option 1 Read from file**
- - Reads all the uno cards images
+ - Opens submenu with 2 options: read data from file **by selection or** read **all data** from files
  - Performs image processing and outputs image data (color and number)
  - **Reliant on .jpg image data in img** folder
 
@@ -50,10 +50,7 @@ When running a menu will appear in the terminal window as ilustrated bellow.
 
 **Option 3 - Data capturing** **DEVELOPMENT ONLY**
  - Runs a script that captures uno cards images
-
-**Option 4 - Apply Machine Learning**
- - Will open SUBMENU
-
+ - May overwrite the images files in the img folder within th eproject source
 
 # Files and Folders description and requirements
 
