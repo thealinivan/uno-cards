@@ -14,6 +14,7 @@ Recognizing uno cards using computer vision
  - OpenCV 4.5.5
  - TensorFlow 2.8
  - Matplotlib 
+ - Spyder IDE (or other IDE/code editor that can plot images)
 
 
 ### Run on a local machine
@@ -23,7 +24,19 @@ In a terminal window
 git clone https://labcode.mdx.ac.uk/alinivan/uno-cards.git
 cd uno-cards
 python main.py
+
 ```
+This will create a local copy of the project, access the project folder and attempt to run.
+It might fail because of the plotting is doing. In that case..
+
+
+Open the code editor and add the python files by browsing/drag and drop/navigating from the code editor terminal.
+You can then highlight main.py and press play or open the temrinal in the code editor and write..
+
+```
+run main.py
+```
+
 When running a menu will appear in the terminal window as ilustrated bellow.
 ```
 -----------------
