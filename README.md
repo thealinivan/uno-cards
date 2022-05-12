@@ -12,6 +12,7 @@ Recognizing uno cards using computer vision
  - Python 3.9.7
  - Numpy 1.20.3
  - OpenCV 4.5.5
+ - TensorFlow 2.8
  - Matplotlib 
 
 
